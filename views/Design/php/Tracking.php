@@ -9,20 +9,13 @@
 		<?php
 			include ("ssh.class.php");
 			$CN = new ConnectSSH();
-			$Array = $CN->getNetworkIPLocal();
-			for ($i=0; $i<count($Array); $i++){
-				$IPAddress = $CN->getNmapTrackingIP($Array[$i]);
-				for ($j = 0; $j < count($IPAddress); $j++){
-					?>
-						<tr onclick="javascript: SwapIP('<?php echo trim($IPAddress[$j]);?>');" title="Seleccionar <?php echo $IPAddress[$j]; ?> para realizar la conexión">
-							<td class="show_elements">
-								<?php echo $IPAddress[$j]; ?>
-							</td>
-						</tr>
-					<?php
-				}
-			}
+			
+			echo "Dato: ".$CN->testing();
 		?>
+
+		<tr>
+			<td style="width: 100%; padding: 10px;"><b>Hosts encontrados</b></td>
+		</tr>
 	</table>
 	<br>
 </div>

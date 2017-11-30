@@ -15,7 +15,7 @@
         		array_push($this->errors, "La función ssh2_connect no existe");
 			}
 
-        	if(!($this->connect = ssh2_connect($ip_host, 22))){
+        	if(!($this->connect = @ssh2_connect($ip_host, 22))){
 				$this->ip_host = $ip_host;
         		array_push($this->errors, "No hay conexión con al dirección IP: " . $ip_host);
 		    } else {
@@ -490,6 +490,10 @@
 		
 		public function getErrors(){
 			return implode("<br/>", $this->errors);
+		}
+
+		public function testing(){
+			return "Okay";
 		}
 	}
 	// echo (new ConnectSSH("192.168.100.2", "network", "123"))->getDHCPShowAssignIP();

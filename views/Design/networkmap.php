@@ -497,11 +497,17 @@
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <button type="button" onclick="javascript: StartTracking();" class="btn btn-warning waves-effect">
+                                <button type="button" onclick="javascript: StartTracking();" class="btn_tracking btn btn-warning waves-effect">
                                     <i class="material-icons">perm_scan_wifi</i>
                                     <span>SONDEAR INFRAESTRUCTURA DE RED</span>
                                 </button>
                             </div>
+
+                            <br><br>
+                            <div class="here_write">
+                                
+                            </div>
+
                         </div>
                     </div>
                 </div>
