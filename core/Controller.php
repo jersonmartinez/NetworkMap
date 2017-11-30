@@ -3,8 +3,8 @@
 
 		function __construct(){
 
-			if ($_GET && isset($_GET['action'])){
-				$action = $_GET['action'];
+			if ($_REQUEST && isset($_REQUEST['action'])){
+				$action = $_REQUEST['action'];
 
 				if (method_exists($this, $action))
 					$this->$action();

@@ -301,13 +301,13 @@
             <div class="menu">
                 <ul class="list">
                     <li class="header">NAVEGACIÓN PRINCIPAL</li>
-                    <li class="active">
-                        <a href="./index.php">
+                    <li>
+                        <a href="./">
                             <i class="material-icons">devices</i>
                             <span>Dispositivos</span>
                         </a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="./?controller=Design&action=networkmap">
                             <i class="material-icons">network_check</i>
                             <span>Mapa de red</span>
@@ -481,64 +481,32 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h2>LISTA DE DISPOSITIVOS</h2>
+                            <h2>DIBUJAR MAPA DE RED (TOPOLOGÍA)</h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Agregar host</a></li>
-                                        <li><a href="javascript:void(0);">Ver topología</a></li>
-                                        <li><a href="javascript:void(0);">Propiedades</a></li>
+                                        <li><a href="javascript:void(0);">Action</a></li>
+                                        <li><a href="javascript:void(0);">Another action</a></li>
+                                        <li><a href="javascript:void(0);">Something else here</a></li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-hover dashboard-task-infos">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Nombre de usuario</th>
-                                            <th>Estado</th>
-                                            <th>Dirección IP</th>
-                                            <th>Contraseña</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                       <!--  <tr>
-                                            <td>1</td>
-                                            <td>Task A</td>
-                                            <td><span class="label bg-green">Doing</span></td>
-                                            <td>John Doe</td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-green" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="width: 62%"></div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                       
-                                        <tr>
-                                            <td>5</td>
-                                            <td>Task E</td>
-                                            <td>
-                                                <span class="label bg-red">Suspended</span>
-                                            </td>
-                                            <td>John Doe</td>
-                                            <td>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-red" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100" style="width: 87%"></div>
-                                                </div>
-                                            </td>
-                                        </tr> -->
-                                    </tbody>
-                                </table>
+                                <button type="button" onclick="javascript: StartTracking();" class="btn btn-warning waves-effect">
+                                    <i class="material-icons">perm_scan_wifi</i>
+                                    <span>SONDEAR INFRAESTRUCTURA DE RED</span>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- #END# Task Info -->
+                <!-- Browser Usage -->
                 <!-- #END# Browser Usage -->
             </div>
         </div>
@@ -549,6 +517,9 @@
 
     <!-- Bootstrap Core Js -->
     <script src="views/Design/plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Bootstrap Notify Plugin Js -->
+    <script src="views/Design/plugins/bootstrap-notify/bootstrap-notify.js"></script>
 
     <!-- Select Plugin Js -->
     <script src="views/Design/plugins/bootstrap-select/js/bootstrap-select.js"></script>
@@ -583,7 +554,10 @@
     <script src="views/Design/js/admin.js"></script>
     <script src="views/Design/js/pages/index.js"></script>
 
+    <script src="views/Design/js/pages/ui/notifications.js"></script>
+
     <!-- Demo Js -->
     <script src="views/Design/js/demo.js"></script>
+    <script src="views/Design/js/script.js"></script>
 </body>
 </html>
