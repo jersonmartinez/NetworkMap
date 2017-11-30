@@ -1,5 +1,5 @@
 <?php
-	class Contacts extends Controller {
+	class Design extends Controller {
 
 		function __construct(){
 			parent::__construct();
@@ -7,12 +7,12 @@
 
 		public function index(){
 
-			$Loader = new LoadModel("ContactsModel");
+			$Loader = new LoadModel("DesignModel");
 
-			$Contacts = new ContactsModel();
-			$ListContacts = $Contacts->getContacts();
+			$Return = new DesignModel();
+			$LstReturn = $Return->getContacts();
 
-			(new View("Contacts/index.php", compact("ListContacts")));
+			(new View("Design/index.php", compact("LstReturn")));
 		}
 	}
 ?>

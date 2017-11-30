@@ -1,5 +1,5 @@
 <?php
-	class ContactsModel extends Model {
+	class DesignModel extends Model {
 		public function getContacts(){
 			$result = $this->db->query("SELECT * FROM contacts;");
 
