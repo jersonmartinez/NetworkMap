@@ -5,7 +5,7 @@ class Model {
 
 	function __construct(){
 
-		$this-db = getConnection();
+		$this->db = $this->getConnection();
 
 		// try {
 		// 	$this->db = $this->getConnection();
@@ -16,9 +16,9 @@ class Model {
 
 	public function getConnection(){
 		$host = "127.0.0.1";
-		$user = "SideMaster";
-		$pass = "Inform@tico";
-		$database = "mvc";
+		$user = "root";
+		$pass = "root";
+		$database = "monitorizador";
 		$charset = "utf8";
 
 		return (new mysqli($host, $user, $pass, $database));
