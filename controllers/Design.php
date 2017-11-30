@@ -10,7 +10,7 @@
 			$Loader = new LoadModel("DesignModel");
 
 			$Return = new DesignModel();
-			$LstReturn = $Return->getContacts();
+			// $LstReturn = $Return->getContacts();
 
 			(new View("Design/index.php", compact("LstReturn")));
 		}
