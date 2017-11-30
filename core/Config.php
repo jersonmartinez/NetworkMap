@@ -1,3 +1,3 @@
 <?php
-	$default_controller = "Contacts";
+	$default_controller = "Design";
 ?>
