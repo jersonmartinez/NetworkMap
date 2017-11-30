@@ -308,7 +308,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="./">
+                        <a href="./networkmap.php">
                             <i class="material-icons">network_check</i>
                             <span>Mapa de red</span>
                         </a>
