@@ -2,20 +2,25 @@
 <div>
 	<p>Se realiza una búsqueda de nodos en todos los adaptadores disponibles</p>
 	<table ondblclick="javascript: CloseModal();" style="width: 100%;">
-		<tr>
+		<!-- <tr>
 			<td style="width: 100%; padding: 10px;"><b>Hosts encontrados</b></td>
-		</tr>
+		</tr> -->
 
 		<?php
 			include ("ssh.class.php");
 			$CN = new ConnectSSH();
-			
-			echo "Dato: ".$CN->Tracking();
+			// echo "Direcciones: ".$CN->getIPLocal();
+
+			list ($AHost, $ANetwork) = $CN->Tracking();
+
+			print_r($AHost);
+			print_r($ANetwork);
+
 		?>
 
-		<tr>
+		<!-- <tr>
 			<td style="width: 100%; padding: 10px;"><b>Hosts encontrados</b></td>
-		</tr>
+		</tr> -->
 	</table>
 	<br>
 </div>

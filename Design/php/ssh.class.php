@@ -496,16 +496,68 @@
 			return "Okay";
 		}
 
+		public function getIPLocalCurrent(){
+			return shell_exec("ip route show default | awk '/default/ {print $3}'");
+		}
+
 		public function getIPLocal(){
-			return shell_exec('ip route show | awk {"print $NF"}');
-			
+			return trim(shell_exec("ip route | sed '/default/ d' | cut -d ' ' -f1"));
+		}
+
+		public function FinalConnect($ip_host, $username, $password){
+			if (!function_exists("ssh2_connect")) {
+        		array_push($this->errors, "La función ssh2_connect no existe");
+			}
+
+        	if(!($this->connect = ssh2_connect($ip_host, 22))){
+				$this->ip_host = $ip_host;
+        		array_push($this->errors, "No hay conexión con al dirección IP: " . $ip_host);
+		    } else {
+		        if(!ssh2_auth_password($this->connect, $username, $password)) {
+        			array_push($this->errors, "Autenticación invalida");
+		        } else {
+					$this->ip_host 		= $ip_host;
+					$this->username 	= $username;
+					$this->password 	= $password;
+					$this->remote_path 	= "/home/".$username."/";
+		        }
+		    }
+
+		    return true;
 		}
 
 		public function Tracking(){
-			$rcb = shell_exec("nmap 192.168.100.0/24 -n -sP | grep report | awk '{print $5}'");
-			return $rcb;
-			// return shell_exec("nmap -sP 192.168.100.0/24 | grep 'scan ' | cut -d ' ' -f5");
+
+			$IPLocal = explode("\n", $this->getIPLocal());
+			
+			for ($i = 0; $i < sizeof($IPLocal); $i++){
+				// $ArrayTotal[$i] = trim($IPLocal[$i]);
+
+				$Info = explode("\n", shell_exec("nmap ".$IPLocal[$i]." -n -sP | grep report | awk '{print $5}'"));
+				$ArrayNetwork[$i] = trim($IPLocal[$i]);
+
+				$RL[] = "cat /proc/sys/net/ipv4/ip_forward";
+				
+				for ($j = 0; $j < sizeof($Info)-1; $j++){
+					$ArrayHosts[$i][$j] = trim($Info[$j]);
+
+					$this->FinalConnect($ArrayHosts[$i][$j], "network", "123");
+
+					$ip_forward = $this->RunLines(implode("\n", $RL));
+
+					if ($ip_forward > 0){
+						echo "IP: ".$ArrayHosts[$i][$j]." => ".$ip_forward."(Enrutador)<br/>";
+					} else {
+						echo "IP: ".$ArrayHosts[$i][$j]." => ".$ip_forward."(Host)<br/>";
+					}
+					
+
+				}
+			}
+
+			return array ($ArrayHosts, $ArrayNetwork);
 		}
+
 	}
 	// echo (new ConnectSSH("192.168.100.2", "network", "123"))->getDHCPShowAssignIP();
 ?>
