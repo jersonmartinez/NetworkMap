@@ -1,4 +1,10 @@
 <?php
+	class SideMasters extends mysqli {
+		public function __construct($host, $user, $pass, $db){
+			@parent::__construct($host, $user, $pass, $db);
+		}
+	}
+
 	class ConnectSSH {
 		public $ip_host;
 		private $username;
@@ -526,36 +532,253 @@
 		    return true;
 		}
 
-		public function Tracking(){
+		public function addNetwork($ip_net, $checked){
+			if ($this->ConnectDB()->query("INSERT INTO network (ip_net, checked) VALUES ('".$ip_net."','1');"))
+				return true;
 
-			$IPLocal = explode("\n", $this->getIPLocal());
+			return false;
+		}
+
+		public function addHost($ip_net, $ip_host, $router, $net_next){
+			$query = "INSERT INTO host (ip_net, ip_host, router, net_next) VALUES ('".$ip_net."', '".$ip_host."', '".$router."', '".$net_next."');";
 			
-			for ($i = 0; $i < sizeof($IPLocal); $i++){
-				// $ArrayTotal[$i] = trim($IPLocal[$i]);
+			if ($this->ConnectDB()->query($query))
+				return true;
 
-				$Info = explode("\n", shell_exec("nmap ".$IPLocal[$i]." -n -sP | grep report | awk '{print $5}'"));
-				$ArrayNetwork[$i] = trim($IPLocal[$i]);
+			return false;
+		}
 
-				$RL[] = "cat /proc/sys/net/ipv4/ip_forward";
-				
-				for ($j = 0; $j < sizeof($Info)-1; $j++){
-					$ArrayHosts[$i][$j] = trim($Info[$j]);
+		public function getIPNetNext($ip_net){
+			return $this->ConnectDB()->query("SELECT DISTINCT * FROM network WHERE ip_net>'".$ip_net."' ORDER BY ip_net DESC LIMIT 1;")->fetch_array(MYSQLI_ASSOC)['ip_net'];
+		}
 
-					$this->FinalConnect($ArrayHosts[$i][$j], "network", "123");
+		public function getIPNet(){
+			return @$this->ConnectDB()->query("SELECT DISTINCT * FROM network;");
+		}
 
-					$ip_forward = $this->RunLines(implode("\n", $RL));
+		public function getIPNetLast(){
+			return @$this->ConnectDB()->query("SELECT DISTINCT * FROM network ORDER BY ip_net DESC LIMIT 1;");
+		}
 
-					if ($ip_forward > 0){
-						echo "IP: ".$ArrayHosts[$i][$j]." => ".$ip_forward."(Enrutador)<br/>";
-					} else {
-						echo "IP: ".$ArrayHosts[$i][$j]." => ".$ip_forward."(Host)<br/>";
-					}
-					
+		public function getIPNetOnly(){
+			return @$this->ConnectDB()->query("SELECT DISTINCT * FROM network LIMIT 1;")->fetch_array(MYSQLI_ASSOC)['ip_net'];
+		}
 
-				}
+		public function VerifyIPForward($IPHost){
+
+		}
+
+		public function IPRouteShow($IPHost){
+			$R = $this->getIPNet();
+
+			if ($IPHost == "localhost"){
+				$AddrIPNext = explode("\n", $this->getIPLocal());
+
+				return trim($AddrIPNext[0]);
+			} else {
+				$this->FinalConnect($IPHost, "network", "123");
+				$RA[] = "ip route | sed '/default/ d' | cut -d ' ' -f1";
+
+				$AddrIPNext = explode("\n", $this->RunLines(implode("\n", $RA)));
 			}
 
+			if ($R->num_rows > 0){
+				while ($row = $R->fetch_array(MYSQLI_ASSOC)){
+					if (in_array($row['ip_net'], $AddrIPNext)){
+						return $row['ip_net'];
+					}
+				}
+			}
+		}
+
+		public function SondearRed($IPNet){
+			return explode("\n", shell_exec("nmap ".$IPNet." -n -sP | grep report | awk '{print $5}'"));
+		}
+
+		public function Tracking(){
+			$IPLocal = $this->IPRouteShow("localhost");
+
+			$i = 0;
+			do {
+				$CountNet = $this->getIPNet()->num_rows;
+				
+				if ($CountNet == 0){
+					$Info = $this->SondearRed($IPLocal);
+
+					//Para saber si es enrutador
+					$RL[] = "cat /proc/sys/net/ipv4/ip_forward";
+
+					//Para obtener las otras rutas de red
+					$RA[] = "ip route | sed '/default/ d' | cut -d ' ' -f1";
+
+					for ($j = 0; $j < sizeof($Info)-1; $j++){
+						//Se agregan en un array los dispositivos sondeados
+						$ArrayHosts[$i][$j] = trim($Info[$j]);
+
+						//Se aplica una conexion SSH al host
+						$this->FinalConnect($ArrayHosts[$i][$j], "network", "123");
+
+						//Se obtiene valores booleanos (0, 1 = enrutador)
+						$ip_forward = $this->RunLines(implode("\n", $RL));
+
+						//Se verifica si es enrutador
+						if ($ip_forward > 0){
+							//Si es enrutador, se le pregunta por las nuevas rutas de red
+							$AddrIPNext = $this->IPRouteShow($ArrayHosts[$i][$j]);
+							//Si viene un resultado vacio, entonces no hay red siguiente
+							$AddrIPNext = empty($AddrIPNext) ? "-" : $AddrIPNext;
+
+							//Si hay red siguiente, entonces se agrega la siguiente red a la tabla de redes
+							if ($AddrIPNext != "-"){
+								$this->addNetwork($AddrIPNext);
+								//Si hay siguiente, este deberia pasar a la otra vuelta del ciclo
+								$Feliz = 1;
+							}
+							
+						} else {
+							//No es enrutador
+							$AddrIPNext = "-";
+						}
+						echo "<br/>Direccion de Red: ".$IPLocal[$i].", Host: ".$ArrayHosts[$i][$j].", Router: ".$ip_forward.", Siguiente: ".$AddrIPNext."<br/>";
+						$this->addHost($IPLocal[$i], $ArrayHosts[$i][$j], $ip_forward, $AddrIPNext); 
+					}
+
+				}
+				exit();
+				
+				//Se obtiene la red actual
+				$ArrayNetwork = trim($IPLocal);
+
+				
+				//Se verifica si hay red
+				if ($CountNet == 0){
+					echo "<br/>Red inicial: ".$ArrayNetwork."<br/>";
+					//Si no hay, se agrega la actual y primera direccion de red
+					$this->addNetwork($ArrayNetwork);
+
+					//Obtengo la primer direccion de red de la base de datos
+					$AddNet = $this->getIPNetOnly();
+
+					//Se sondea la primera direccion de red
+					$Info = explode("\n", shell_exec("nmap ".$AddNet." -n -sP | grep report | awk '{print $5}'"));
+					
+					//Para saber si es enrutador
+					$RL[] = "cat /proc/sys/net/ipv4/ip_forward";
+
+					//Para obtener las otras rutas de red
+					$RA[] = "ip route | sed '/default/ d' | cut -d ' ' -f1";
+					
+					//Se recorren los dispositivos sondeados
+					for ($j = 0; $j < sizeof($Info)-1; $j++){
+						//Se agregan en un array los dispositivos sondeados
+						$ArrayHosts[$i][$j] = trim($Info[$j]);
+
+						//Se aplica una conexion SSH al host
+						$this->FinalConnect($ArrayHosts[$i][$j], "network", "123");
+
+						//Se obtiene valores booleanos (0, 1 = enrutador)
+						$ip_forward = $this->RunLines(implode("\n", $RL));
+
+						//Se verifica si es enrutador
+						if ($ip_forward > 0){
+							//Si es enrutador, se le pregunta por las nuevas rutas de red
+							$AddrIPNext = trim(explode("\n", $this->RunLines(implode("\n", $RA)))[1]);
+							//Si viene un resultado vacio, entonces no hay red siguiente
+							$AddrIPNext = empty($AddrIPNext) ? "-" : $AddrIPNext;
+
+							//Si hay red siguiente, entonces se agrega la siguiente red a la tabla de redes
+							if ($AddrIPNext != "-"){
+								$this->addNetwork($AddrIPNext);
+								//Si hay siguiente, este deberia pasar a la otra vuelta del ciclo
+								$Feliz = 1;
+							}
+							
+						} else {
+							//No es enrutador
+							$AddrIPNext = "-";
+						}
+						echo "<br/>Direccion de Red: ".$ArrayNetwork[$i].", Host: ".$ArrayHosts[$i][$j].", Router: ".$ip_forward.", Siguiente: ".$AddrIPNext."<br/>";
+						$this->addHost($ArrayNetwork[$i], $ArrayHosts[$i][$j], $ip_forward, $AddrIPNext); 
+					}
+
+
+				} else if ($CountNet == 1) {
+					// Si hay una red
+
+					echo "Finalizando";
+
+				} else if ($CountNet > 1 && !empty($this->getIPNetNext($ArrayNetwork[$i]))){
+					//Se extrae la siguiente direccion IP
+					$ArrayNetworkNext = $this->getIPNetNext($ArrayNetwork[$i]);
+
+					echo "<br/>Test: ".$ArrayNetworkNext."<br/>";
+					//Si no hay, se agrega la actual y primera direccion de red
+					// $this->addNetwork($ArrayNetwork[$i]);
+
+					//Obtengo la primer direccion de red de la base de datos
+					// $AddNet = $this->getIPNetOnly();
+
+					//Se sondea la primera direccion de red
+					$Info = explode("\n", shell_exec("nmap ".$ArrayNetworkNext." -n -sP | grep report | awk '{print $5}'"));
+					
+					//Para saber si es enrutador
+					$RL[] = "cat /proc/sys/net/ipv4/ip_forward";
+
+					//Para obtener las otras rutas de red
+					$RA[] = "ip route | sed '/default/ d' | cut -d ' ' -f1";
+					
+					//Se recorren los dispositivos sondeados
+					for ($j = 0; $j < sizeof($Info)-1; $j++){
+						//Se agregan en un array los dispositivos sondeados
+						$ArrayHosts[$i][$j] = trim($Info[$j]);
+
+						//Se aplica una conexion SSH al host
+						echo "Lo hace: ".$ArrayHosts[$i][$j]."<br/><br/>";
+
+						$this->FinalConnect($ArrayHosts[$i][$j], "network", "123");
+
+						//Se obtiene valores booleanos (0, 1 = enrutador)
+						$ip_forward = $this->RunLines(implode("\n", $RL));
+
+						//Se verifica si es enrutador
+						if ($ip_forward > 0){
+							//Si es enrutador, se le pregunta por las nuevas rutas de red
+							$AddrIPNext = trim(explode("\n", $this->RunLines(implode("\n", $RA)))[1+$i]);
+							//Si viene un resultado vacio, entonces no hay red siguiente
+							$AddrIPNext = empty($AddrIPNext) ? "-" : $AddrIPNext;
+
+							//Si hay red siguiente, entonces se agrega la siguiente red a la tabla de redes
+							if ($AddrIPNext != "-"){
+								$this->addNetwork($AddrIPNext);
+								//Si hay siguiente, este deberia pasar a la otra vuelta del ciclo
+								echo "Ya hay uno siguiente<br/>";
+								$Feliz = 1;
+							} else {
+								$Feliz = 0;
+							}
+							
+						} else {
+							//No es enrutador
+							$AddrIPNext = "-";
+						}
+
+						echo "<br/>Direccion de Red: ".$ArrayNetworkNext.", Host: ".$ArrayHosts[$i][$j].", Router: ".$ip_forward.", Siguiente: ".$AddrIPNext."<br/>";
+						
+						$this->addHost($ArrayNetworkNext, $ArrayHosts[$i][$j], $ip_forward, $AddrIPNext); 
+					}
+
+					$Feliz = 0;
+				}
+
+				// $Feliz = $this->getIPNetNext($ArrayNetwork[$i])->num_rows;
+				$i++;
+			} while ($Feliz != 0);
+
 			return array ($ArrayHosts, $ArrayNetwork);
+		}
+
+		public function ConnectDB(){
+			return new SideMasters("127.0.0.1", "root", "root", "monitorizador");
 		}
 
 	}

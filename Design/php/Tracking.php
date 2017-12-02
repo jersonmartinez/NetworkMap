@@ -9,8 +9,7 @@
 		<?php
 			include ("ssh.class.php");
 			$CN = new ConnectSSH();
-			// echo "Direcciones: ".$CN->getIPLocal();
-
+			// echo "IP es: ".$CN->IPRouteShow("localhost");
 			list ($AHost, $ANetwork) = $CN->Tracking();
 
 			print_r($AHost);
