@@ -9,11 +9,45 @@
 		<?php
 			include ("ssh.class.php");
 			$CN = new ConnectSSH();
-			// echo "IP es: ".$CN->IPRouteShow("localhost");
-			list ($AHost, $ANetwork) = $CN->Tracking();
 
-			print_r($AHost);
-			print_r($ANetwork);
+			// echo "Aplicando limpieza...".$CN->InitTables()."<br/>";
+			
+			$time_start = microtime(true);
+
+			$CN->SpaceTest();
+
+			$time_end = microtime(true);
+			$time = $time_end - $time_start;
+
+
+			echo "<br/><br/> <b>Retardo:</b> ".number_format($time, 2, '.', '')." segundos\n";
+
+
+
+			// // Dormir por un momento
+			// usleep(100);
+
+
+
+			// echo "IP de red Local: ".$CN->getIpRouteLocal()."<br/>";
+
+			// $IP = "192.168.100.1";
+
+			// if ($CN->IsRouter($IP)){
+			// 	echo "<br/>Es un enrutador<br/>";
+			// } else {
+			// 	echo "<br/>Es un host<br/>";
+			// }
+
+			// echo "IP es esta: ".$CN->getIpRouteRemote($IP);
+			
+
+
+			// echo "IP es: ".$CN->getIpRouteLocal();
+			// list ($AHost, $ANetwork) = $CN->Tracking();
+
+			// print_r($AHost);
+			// print_r($ANetwork);
 
 		?>
 

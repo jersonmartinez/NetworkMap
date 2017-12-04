@@ -506,10 +506,6 @@
 			return shell_exec("ip route show default | awk '/default/ {print $3}'");
 		}
 
-		public function getIPLocal(){
-			return trim(shell_exec("ip route | sed '/default/ d' | cut -d ' ' -f1"));
-		}
-
 		public function FinalConnect($ip_host, $username, $password){
 			if (!function_exists("ssh2_connect")) {
         		array_push($this->errors, "La función ssh2_connect no existe");
@@ -532,8 +528,15 @@
 		    return true;
 		}
 
-		public function addNetwork($ip_net, $checked){
-			if ($this->ConnectDB()->query("INSERT INTO network (ip_net, checked) VALUES ('".$ip_net."','1');"))
+		public function addNetwork($ip_net, $checked = "0"){
+			if ($this->ConnectDB()->query("INSERT INTO network (ip_net, checked) VALUES ('".$ip_net."','".$checked."');"))
+				return true;
+
+			return false;
+		}
+
+		public function updateNetwork($ip_net, $checked){
+			if ($this->ConnectDB()->query("UPDATE network SET checked='".$checked."' WHERE ip_net='".$ip_net."';"))
 				return true;
 
 			return false;
@@ -552,6 +555,7 @@
 			return $this->ConnectDB()->query("SELECT DISTINCT * FROM network WHERE ip_net>'".$ip_net."' ORDER BY ip_net DESC LIMIT 1;")->fetch_array(MYSQLI_ASSOC)['ip_net'];
 		}
 
+		//Extrae todas las direcciones de red.
 		public function getIPNet(){
 			return @$this->ConnectDB()->query("SELECT DISTINCT * FROM network;");
 		}
@@ -564,9 +568,140 @@
 			return @$this->ConnectDB()->query("SELECT DISTINCT * FROM network LIMIT 1;")->fetch_array(MYSQLI_ASSOC)['ip_net'];
 		}
 
-		public function VerifyIPForward($IPHost){
+		// public function VerifyIPForward($IPHost){
 
+		// }
+
+		public $CommandIpRoute = "ip route | sed -e '/src/ !d' | sed '/default/ d' | cut -d ' ' -f1";
+
+		//Limpieza de tablas
+		public function InitTables(){
+			$this->ConnectDB()->query("TRUNCATE network;");
+			$this->ConnectDB()->query("TRUNCATE host;");
 		}
+
+		public function IsRouter($IPHost, $user = "network", $pass = "123"){
+			$this->FinalConnect($IPHost, $user, $pass);
+
+			$RL[] = "cat /proc/sys/net/ipv4/ip_forward";
+			
+			//Se obtiene valores booleanos (0, 1 = enrutador)
+			$ip_forward = (int)trim($this->RunLines(implode("\n", $RL)));
+
+			return $ip_forward;
+		}
+
+		public function getIpRouteLocal(){
+			return trim(explode("\n", trim(shell_exec($this->CommandIpRoute)))[0]);
+		}
+
+		public function getIpRouteRemote($IPHost, $user = "network", $pass = "123"){
+			$this->FinalConnect($IPHost, $user, $pass);
+
+			$RA[] = $this->CommandIpRoute;
+
+			return implode("\n", explode("\n", $this->RunLines(implode("\n", $RA))));
+		}
+
+		public function getCountNetwork(){
+			return @(int)$this->ConnectDB()->query("SELECT DISTINCT count(*) AS 'count' FROM network;")->fetch_array()['count'];
+		}
+
+		public function getCountNetworkChecked(){
+			return @(int)$this->ConnectDB()->query("SELECT DISTINCT count(*) AS 'count' FROM network WHERE checked='0';")->fetch_array()['count'];
+		}
+
+		public function getAllNetworkChecked(){
+			return @$this->ConnectDB()->query("SELECT DISTINCT * FROM network WHERE checked='0' LIMIT 1;");
+		}
+
+		public function SpaceTest(){
+			//Limpieza de tablas
+			echo "Aplicando limpieza...";
+			$this->InitTables();
+			echo "<br/>";
+
+			do {
+				//Si esta vacia la tabla network
+				if (!$this->getCountNetwork()){
+					//Se agrega la red por omision
+					if ($this->addNetwork($this->getIpRouteLocal())){
+						echo "No hay datos (accion) => Se ha agregado el primer dato de red: ".$this->getIpRouteLocal();
+					} else {
+						echo "No hay datos (accion) => No ha podido agregar la primera direccion de red: ".$this->getIpRouteLocal();
+					}
+				} else {
+					echo "<br/>Hay datos";
+				}
+				echo "<br/><br/>";
+
+				echo "Valor de Checked: ".$this->getCountNetworkChecked()."<br/>";
+
+				if ($this->getAllNetworkChecked()->num_rows > 0){
+					$Network = $this->getAllNetworkChecked()->fetch_array(MYSQLI_ASSOC)['ip_net'];
+
+					//Escribir la red que no ha sido sondeada.
+					echo "<br/>Red escrita en la DB: ".$Network." no sondeada.<br/>";
+
+					//Se sondea la red
+					$D = $this->SondearRed($Network);
+
+					//Eliminando el ultimo dato \n
+					unset($D[count($D) - 1]);
+
+					echo "Valores sondeados: ";
+					foreach ($D as $value) {
+						$ip_forward = $this->IsRouter($value);
+						$ArrayNets = explode("\n", $this->getIpRouteRemote($value));
+						
+						//Se;alando patrones para extraer el siguiente.
+						$NextNet = $ArrayNets[0];
+						$NextNet = "-";
+
+						if ($ip_forward){
+							$NextNet = $ArrayNets[1];
+							if (trim($Network) == trim($NextNet)){
+								$NextNet = "-";
+							} else {
+								if ($this->addNetwork($NextNet)){
+									echo "<br/>IP Network: ".$NextNet." ha sido agregada<br/>";
+								}
+							}
+						}
+
+						if ($this->addHost($Network, $value, $ip_forward, $NextNet)){
+		    				echo "<br/>IP Red: ".$Network." | IP Host: ".$value." | Router: ".$ip_forward." | Proxima red: ".$NextNet."<br/>";
+						}
+		    		}
+
+
+		    		echo "<br/>";
+
+					//Actualizar checked (sondeado)
+					if ($this->updateNetwork($Network, 1)){
+						echo "Sondeado<br/>";
+					} else {
+						echo "No se ha podido actualzar el dato<br/>";
+					}
+					
+
+				}
+
+
+			} while ($this->getCountNetworkChecked());
+
+			// if ($this->getCountNetworkChecked()){
+			// 	echo "Si hay datos con checked 1";
+			// } else {
+			// 	echo "nel, no hay checked 1, solo 0";
+			// }
+
+			// echo "<br/>";
+		}
+
+
+
+
 
 		public function IPRouteShow($IPHost){
 			$R = $this->getIPNet();
@@ -596,6 +731,9 @@
 		}
 
 		public function Tracking(){
+			
+
+
 			$IPLocal = $this->IPRouteShow("localhost");
 
 			$i = 0;
