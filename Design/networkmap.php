@@ -1,4 +1,14 @@
-﻿<!DOCTYPE html>
+﻿<?php
+    @session_start();
+    @$_SESSION['call'] = "off";
+
+    include ("php/ssh.class.php");
+    $CN = new ConnectSSH();
+
+    $R = $CN->getAllHost();
+?>
+
+<!DOCTYPE html>
 <html>
 
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
@@ -33,7 +43,7 @@
     <link href="css/themes/all-themes.css" rel="stylesheet" />
 </head>
 
-<body class="theme-red">
+<body class="theme-red" onload="draw();">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
@@ -481,7 +491,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h2>DIBUJAR MAPA DE RED (TOPOLOGÍA)</h2>
+                            <h2>MAPA DE RED (TOPOLOGÍA)</h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -502,11 +512,18 @@
                                     <span>SONDEAR INFRAESTRUCTURA DE RED</span>
                                 </button>
                             </div>
-
-                            <br><br>
+                            
                             <div class="here_write">
-                                
+                                <?php
+                                    if ($R->num_rows > 0){
+                                        include ("network/nodeStyles/images.php");
+                                    } else {
+                                        echo "<br/>Listo para realizar el sondeo.";
+                                    }
+                                ?>
                             </div>
+
+                            <br>
 
                         </div>
                     </div>

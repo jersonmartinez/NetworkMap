@@ -5,6 +5,10 @@ function StartTracking(){
 	    success: function(data){
 	    	$(".here_write").html(data);
 			$(".btn_tracking span").html("SONDEAR INFRAESTRUCTURA DE RED");
+			
+			$("#ClickSondeoFinal").click();
+
+			// draw();
 	    	// setTimeout(function(){
 	    	// 	$("#SondeoModal").click();
 	    	// }, 200);

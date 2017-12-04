@@ -1,12 +1,13 @@
-<h3 ondblclick="javascript: CloseModal();">Rastreo de Hosts</h3>
 <div>
-	<p>Se realiza una búsqueda de nodos en todos los adaptadores disponibles</p>
 	<table ondblclick="javascript: CloseModal();" style="width: 100%;">
 		<!-- <tr>
 			<td style="width: 100%; padding: 10px;"><b>Hosts encontrados</b></td>
 		</tr> -->
 
 		<?php
+			@session_start();
+			@$_SESSION['call'] = "On";
+
 			include ("ssh.class.php");
 			$CN = new ConnectSSH();
 
@@ -15,6 +16,8 @@
 			$time_start = microtime(true);
 
 			$CN->SpaceTest();
+
+			include ("../network/nodeStyles/images.php");
 
 			$time_end = microtime(true);
 			$time = $time_end - $time_start;

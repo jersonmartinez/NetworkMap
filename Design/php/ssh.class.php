@@ -551,6 +551,30 @@
 			return false;
 		}
 
+		public function getHostTypeRouterLast(){
+			return $this->ConnectDB()->query("SELECT DISTINCT * FROM host WHERE router='1' AND net_next!='-' ORDER BY ip_net DESC LIMIT 1;");
+		}
+
+		public function getHostNetwork($network){
+			return $this->ConnectDB()->query("SELECT DISTINCT * FROM host WHERE ip_net='".$network."';");
+		}
+
+		public function getHostTypeRouter(){
+			return $this->ConnectDB()->query("SELECT DISTINCT * FROM host WHERE router='1' AND net_next!='-';");
+		}
+
+		public function getHostTypeSwitch($IPNet){
+			return $this->ConnectDB()->query("SELECT DISTINCT * FROM host WHERE ip_net='".$IPNet."' AND router='0';");
+		}
+
+		public function getHostTypeHost(){
+			return $this->ConnectDB()->query("SELECT DISTINCT * FROM host WHERE router='0';");
+		}
+
+		public function getAllHost(){
+			return $this->ConnectDB()->query("SELECT DISTINCT * FROM host;");
+		}
+
 		public function getIPNetNext($ip_net){
 			return $this->ConnectDB()->query("SELECT DISTINCT * FROM network WHERE ip_net>'".$ip_net."' ORDER BY ip_net DESC LIMIT 1;")->fetch_array(MYSQLI_ASSOC)['ip_net'];
 		}
@@ -617,31 +641,31 @@
 
 		public function SpaceTest(){
 			//Limpieza de tablas
-			echo "Aplicando limpieza...";
+			// echo "Aplicando limpieza...";
 			$this->InitTables();
-			echo "<br/>";
+			// echo "<br/>";
 
 			do {
 				//Si esta vacia la tabla network
 				if (!$this->getCountNetwork()){
 					//Se agrega la red por omision
 					if ($this->addNetwork($this->getIpRouteLocal())){
-						echo "No hay datos (accion) => Se ha agregado el primer dato de red: ".$this->getIpRouteLocal();
+						// echo "No hay datos (accion) => Se ha agregado el primer dato de red: ".$this->getIpRouteLocal();
 					} else {
-						echo "No hay datos (accion) => No ha podido agregar la primera direccion de red: ".$this->getIpRouteLocal();
+						// echo "No hay datos (accion) => No ha podido agregar la primera direccion de red: ".$this->getIpRouteLocal();
 					}
 				} else {
-					echo "<br/>Hay datos";
+					// echo "<br/>Hay datos";
 				}
-				echo "<br/><br/>";
+				// echo "<br/><br/>";
 
-				echo "Valor de Checked: ".$this->getCountNetworkChecked()."<br/>";
+				// echo "Valor de Checked: ".$this->getCountNetworkChecked()."<br/>";
 
 				if ($this->getAllNetworkChecked()->num_rows > 0){
 					$Network = $this->getAllNetworkChecked()->fetch_array(MYSQLI_ASSOC)['ip_net'];
 
 					//Escribir la red que no ha sido sondeada.
-					echo "<br/>Red escrita en la DB: ".$Network." no sondeada.<br/>";
+					// echo "<br/>Red escrita en la DB: ".$Network." no sondeada.<br/>";
 
 					//Se sondea la red
 					$D = $this->SondearRed($Network);
@@ -649,7 +673,7 @@
 					//Eliminando el ultimo dato \n
 					unset($D[count($D) - 1]);
 
-					echo "Valores sondeados: ";
+					// echo "Valores sondeados: ";
 					foreach ($D as $value) {
 						$ip_forward = $this->IsRouter($value);
 						$ArrayNets = explode("\n", $this->getIpRouteRemote($value));
@@ -664,24 +688,24 @@
 								$NextNet = "-";
 							} else {
 								if ($this->addNetwork($NextNet)){
-									echo "<br/>IP Network: ".$NextNet." ha sido agregada<br/>";
+									// echo "<br/>IP Network: ".$NextNet." ha sido agregada<br/>";
 								}
 							}
 						}
 
 						if ($this->addHost($Network, $value, $ip_forward, $NextNet)){
-		    				echo "<br/>IP Red: ".$Network." | IP Host: ".$value." | Router: ".$ip_forward." | Proxima red: ".$NextNet."<br/>";
+		    				// echo "<br/>IP Red: ".$Network." | IP Host: ".$value." | Router: ".$ip_forward." | Proxima red: ".$NextNet."<br/>";
 						}
 		    		}
 
 
-		    		echo "<br/>";
+		    		// echo "<br/>";
 
 					//Actualizar checked (sondeado)
 					if ($this->updateNetwork($Network, 1)){
-						echo "Sondeado<br/>";
+						// echo "Sondeado<br/>";
 					} else {
-						echo "No se ha podido actualzar el dato<br/>";
+						// echo "No se ha podido actualzar el dato<br/>";
 					}
 					
 
@@ -698,9 +722,6 @@
 
 			// echo "<br/>";
 		}
-
-
-
 
 
 		public function IPRouteShow($IPHost){
@@ -731,8 +752,6 @@
 		}
 
 		public function Tracking(){
-			
-
 
 			$IPLocal = $this->IPRouteShow("localhost");
 
