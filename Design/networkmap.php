@@ -515,7 +515,7 @@
                             
                             <div class="here_write">
                                 <?php
-                                    if ($R->num_rows > 0){
+                                    if (@$R->num_rows > 0){
                                         include ("network/nodeStyles/images.php");
                                     } else {
                                         echo "<br/>Listo para realizar el sondeo.";
@@ -528,9 +528,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- #END# Task Info -->
-                <!-- Browser Usage -->
-                <!-- #END# Browser Usage -->
+               
             </div>
         </div>
     </section>

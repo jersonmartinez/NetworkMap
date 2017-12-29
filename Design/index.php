@@ -18,8 +18,8 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&amp;subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link href="css/fonts.css" rel="stylesheet" type="text/css">
+    <link href="css/icons.css" rel="stylesheet" type="text/css">
 
     <!-- Bootstrap Core Css -->
     <link href="plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -535,9 +535,18 @@
                                                                                         <span class="label bg-green">SÍ</span>
                                                                                     <?php
                                                                                 } else {
-                                                                                    ?>
-                                                                                        <span class="label bg-red">NO</span>
-                                                                                    <?php
+
+                                                                                    if ($CN->getMyIPServer() == $row['ip_host']){
+                                                                                        ?>
+                                                                                            <span class="label bg-red">NO</span> - Monitorizador
+                                                                                        <?php
+                                                                                    } else {
+                                                                                        ?>
+                                                                                            <span class="label bg-red">NO</span>
+                                                                                        <?php
+                                                                                    }
+
+                                                            
                                                                                 }
                                                                             ?>
                                                                         </td>

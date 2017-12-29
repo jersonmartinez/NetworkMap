@@ -14,7 +14,7 @@
             var edges = null;
             var network = null;
 
-            var DIR = 'network/img/refresh-cl/';
+            var DIR = 'network/img/refresh-cl/news/';
             var EDGE_LENGTH_MAIN = 150;
             var EDGE_LENGTH_SUB = 50;
 
@@ -43,7 +43,8 @@
                 //nodes.push({id: 2, label: arrayNet, image: DIR + 'switch.png', shape: 'image'});
 
                 <?php
-                    $ReturnIPNets = $CN->getIPNet();
+                    $getMyIPServer  = $CN->getMyIPServer();
+                    $ReturnIPNets   = $CN->getIPNet();
 
                     if ($ReturnIPNets->num_rows > 0){
                         while ($RIP = $ReturnIPNets->fetch_array(MYSQLI_ASSOC)){
@@ -53,7 +54,7 @@
 
                             if ($Switches->num_rows >= 2){
                                 ?>
-                                    nodes.push({id: <?php echo $RIPValue; ?>, label: "<?php echo $RIP['ip_net']; ?>", image: DIR + 'switch.png', shape: 'image'});
+                                    nodes.push({id: <?php echo $RIPValue; ?>, label: "<?php echo $RIP['ip_net']; ?>", image: DIR + 'switchicon4.png', shape: 'image'});
                                 <?php
                             }
                         }
@@ -68,7 +69,7 @@
                         $RIPValueSwitch = implode("", explode("/", implode("", explode(".", $RRouter['ip_net']))));
                         // $IDValueSwitch  = implode("", explode(".", $RRouter['ip_net']));
                         ?>
-                            nodes.push({id: <?php echo $IDRouter; ?>, label: "<?php echo $RRouter['net_next']; ?>", image: DIR + 'router.png', shape: 'image'});
+                            nodes.push({id: <?php echo $IDRouter; ?>, label: "<?php echo $RRouter['net_next']; ?>", image: DIR + 'routercisco1.png', shape: 'image'});
                             
                             // edges.push({from: <?php echo $IDRouter; ?>, to: <?php echo $RIPValueSwitch; ?>, length: EDGE_LENGTH_SUB});
                         <?php
@@ -82,12 +83,23 @@
                     while ($rm = $Machines->fetch_array(MYSQLI_ASSOC)){
                         $RMValue        = implode("", explode(".", $rm['ip_host']));
                         $RMValueSwitch  = implode("", explode("/", implode("", explode(".", $rm['ip_net']))));
-                        ?>
-                            nodes.push({id: <?php echo $RMValue; ?>, label: "<?php echo $rm['ip_host']; ?>", image: DIR + 'Hardware-My-Computer-3-icon.png', shape: 'image'});
+
+                        if ($getMyIPServer == $rm['ip_host']){
+                            ?>
+                                nodes.push({id: <?php echo $RMValue; ?>, label: "<?php echo $rm['ip_host']; ?>", image: DIR + 'server1.png', shape: 'image'});
+                            
+                                
+                                // edges.push({from: <?php echo $RMValue; ?>, to: <?php echo $RMValueSwitch; ?> , length: EDGE_LENGTH_SUB});
+                            <?php
+                        } else {
+                            ?>
+                                nodes.push({id: <?php echo $RMValue; ?>, label: "<?php echo $rm['ip_host']; ?>", image: DIR + 'laptop1.png', shape: 'image'});
                         
                             
-                            // edges.push({from: <?php echo $RMValue; ?>, to: <?php echo $RMValueSwitch; ?> , length: EDGE_LENGTH_SUB});
-                        <?php
+                                // edges.push({from: <?php echo $RMValue; ?>, to: <?php echo $RMValueSwitch; ?> , length: EDGE_LENGTH_SUB});
+                            <?php
+                        }
+
                     }
                 ?>
 

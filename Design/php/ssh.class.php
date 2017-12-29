@@ -80,212 +80,6 @@
 			return true;
 		}
 
-		public function CreateBackup($arguments){
-			$filename = "CreateBackup.sh";
-			$ActionArray[] = 'CurrentDate=$(date +"%d-%b-%Y")';
-			array_push($ActionArray, 'CurrentDateFormat=$(date +"%d%m%Y")');
-			array_push($ActionArray, 'CurrentDateTime=$(date +"%H%M")');
-			array_push($ActionArray, 'HostName=$(hostname)');
-			array_push($ActionArray, 'PathAbsolute="Backups"');
-			array_push($ActionArray, 'DirStorage=$(printf "/%s/%s/%s_%s_%s" $PathAbsolute $CurrentDate $HostName $CurrentDateFormat $CurrentDateTime)');
-			array_push($ActionArray, 'DirCompact=$(printf "%s_%s_%s" $HostName $CurrentDateFormat $CurrentDateTime)');
-			array_push($ActionArray, 'function CreateDirs(){');
-			array_push($ActionArray, '	[ ! -d $DirStorage ] && mkdir -p ${DirStorage}');
-			array_push($ActionArray, '	chmod 0777 -R -f $(dirname $(dirname $DirStorage))');
-			array_push($ActionArray, '}');
-			array_push($ActionArray, 'function VerifyService(){');
-			array_push($ActionArray, '	PackService=$(ps ax | grep -v grep | grep ${1})');
-			array_push($ActionArray, '	if [[ $PackService != "" ]]; then');
-			array_push($ActionArray, "		echo 'Well'");
-			array_push($ActionArray, '	else');
-			array_push($ActionArray, "		echo 'bad'");
-			array_push($ActionArray, "	fi");
-			array_push($ActionArray, '}');
-			array_push($ActionArray, 'function BackupApache(){');
-			array_push($ActionArray, '	Service="apache"');
-			array_push($ActionArray, '	if [ `VerifyService apache2` == "Well" ]; then');
-			array_push($ActionArray, '		PathApacheArray=("/usr/lib/apache2" "/etc/apache2" "/usr/share/apache2" "/etc/ssl/" "/usr/sbin/apache2" "/usr/sbin/apache2ctl" "/usr/sbin/apachectl")');
-			array_push($ActionArray, '		[ ! -d $DirStorage/$Service/ ] && mkdir -p $DirStorage/$Service/');
-			array_push($ActionArray, '		for PathApache in ${PathApacheArray[*]}; do');
-			array_push($ActionArray, '			if [ -d $PathApache ]; then');
-			array_push($ActionArray, '				local PathFolder=$(basename $(dirname $PathApache))');
-			array_push($ActionArray, '				[ ! -d $DirStorage/$Service/$PathFolder ] && mkdir -p $DirStorage/$Service/$PathFolder');
-			array_push($ActionArray, '				cp -rf $PathApache $DirStorage/$Service/$PathFolder');
-			array_push($ActionArray, '			elif [ -f $PathApache ]; then');
-			array_push($ActionArray, '				[ ! -d $DirStorage/$Service/sbin/ ] && mkdir -p $DirStorage/$Service/sbin/');
-			array_push($ActionArray, '				cp -rf $PathApache $DirStorage/$Service/sbin/');
-			array_push($ActionArray, '			else');
-			array_push($ActionArray, '				echo "No se reconoce el fichero " $PathApache');
-			array_push($ActionArray, '			fi');
-			array_push($ActionArray, '		done');
-			array_push($ActionArray, '		echo -e "\n\e[0;32mLa copia de seguridad de Apache se ha realizado con éxito.\e[0;37m\n"');
-			array_push($ActionArray, '	else');
-			array_push($ActionArray, '		ShowErrors apache2 "El servicio no existe"');
-			array_push($ActionArray, '	fi');
-			array_push($ActionArray, '}');
-			array_push($ActionArray, 'function BackupMySQL(){');
-			array_push($ActionArray, '	Service="mysql"');
-			array_push($ActionArray, '	if [ `VerifyService mysql` == "Well" ]; then');
-			array_push($ActionArray, '		PathMySQLArray=("/usr/lib/mysql/" "/etc/mysql" "/usr/share/mysql")');
-			array_push($ActionArray, '		[ ! -d $DirStorage/$Service/ ] && mkdir -p $DirStorage/$Service/');
-			array_push($ActionArray, '		for PathMySQL in ${PathMySQLArray[*]}; do');
-			array_push($ActionArray, '			if [ -d $PathMySQL ]; then');
-			array_push($ActionArray, '				local PathFolder=$(basename $(dirname $PathMySQL))');
-			array_push($ActionArray, '				mkdir $DirStorage/$Service/$PathFolder');
-			array_push($ActionArray, '				cp -rf $PathMySQL $DirStorage/$Service/$PathFolder');
-			array_push($ActionArray, '			fi');
-			array_push($ActionArray, '		done');
-			array_push($ActionArray, '		ArrayFilesMySQL=($(ls -d /usr/bin/mysql*))');
-			array_push($ActionArray, '		for PathFileMySQL in ${ArrayFilesMySQL[*]}; do');
-			array_push($ActionArray, '			[ ! -d $DirStorage/$Service/bin/ ] && mkdir -p $DirStorage/$Service/bin/');
-			array_push($ActionArray, '			cp -rf $PathFileMySQL $DirStorage/$Service/bin/');
-			array_push($ActionArray, '		done');
-			array_push($ActionArray, '		echo -e "\n\e[0;32mLa copia de seguridad de MySQL se ha realizado con éxito.\e[0;37m\n"');
-			array_push($ActionArray, '	else');
-			array_push($ActionArray, '		ShowErrors mysql "El servicio no existe"');
-			array_push($ActionArray, '	fi');
-			array_push($ActionArray, '}');
-			array_push($ActionArray, 'date_dir=$(date +%d-%b-%Y)');
-			array_push($ActionArray, 'date_file=$(date +%d-%m-%Y)');
-			array_push($ActionArray, 'hour=$(date +%H-%M)');
-			array_push($ActionArray, 'dhcp="dhcp"');
-			array_push($ActionArray, 'dns="dns"');
-			array_push($ActionArray, 'dirDHCP=("/etc/dhcp/"');
-			array_push($ActionArray, '	"/usr/sbin/dhcpd"');
-			array_push($ActionArray, '	"/etc/init.d/isc-dhcp-server"');
-			array_push($ActionArray, ')');
-			array_push($ActionArray, 'dirDNS=("/etc/bind/"');
-			array_push($ActionArray, '	"/usr/bin/bind9-config"');
-			array_push($ActionArray, '	"/etc/init.d/bind9"');
-			array_push($ActionArray, ')');
-			array_push($ActionArray, 'function backupDHCP() {');
-			array_push($ActionArray, '	if [[ `VerifyService dhcpd` == "Well" ]]; then');
-			array_push($ActionArray, '		if [[ ! -d /Backups ]]; then');
-			array_push($ActionArray, '			mkdir /Backups');
-			array_push($ActionArray, '		fi');
-			array_push($ActionArray, '		chmod -R 777 /Backups/');
-			array_push($ActionArray, '		if [[ ! -d /Backups/$date_dir ]]; then');
-			array_push($ActionArray, '			mkdir /Backups/$date_dir');
-			array_push($ActionArray, '		fi');
-			array_push($ActionArray, '		if [[ ! -d /Backups/$date_dir/$dhcp ]]; then');
-			array_push($ActionArray, '			mkdir /Backups/$date_dir/$dhcp');
-			array_push($ActionArray, '		fi');
-			array_push($ActionArray, '		for dir_remoto in ${dirDHCP[*]}; do');
-			array_push($ActionArray, '			cp -rf $dir_remoto /Backups/$date_dir/$dhcp/');
-			array_push($ActionArray, '		done');
-			array_push($ActionArray, '		mv /Backups/$date_dir/$dhcp $DirStorage');
-			array_push($ActionArray, '		if [[ $? -eq 0 ]]; then');
-			array_push($ActionArray, '			echo -e "\n\e[0;32mBacKUP del servicio DHCP realizado con éxito!"');
-			array_push($ActionArray, '			echo -e "\e[0;37m"');
-			array_push($ActionArray, '		else');
-			array_push($ActionArray, '			echo -e "\n\e[0;31mOcurrio un error durante el BacKUP del servicio DHCP\n"');
-			array_push($ActionArray, '			echo -e "\e[0;37m"');
-			array_push($ActionArray, '		fi');
-			array_push($ActionArray, '	else');
-			array_push($ActionArray, '		ShowErrors isc-dhcp-server "El servicio no existe"');
-			array_push($ActionArray, '	fi');
-			array_push($ActionArray, '}');
-			array_push($ActionArray, 'function backupDNS() {');
-			array_push($ActionArray, '	if [[ `VerifyService bind` == "Well" ]]; then');
-			array_push($ActionArray, '		if [[ ! -d /Backups ]]; then');
-			array_push($ActionArray, '			mkdir /Backups');
-			array_push($ActionArray, '		fi');
-			array_push($ActionArray, '		chmod -R 777 /Backups/');
-			array_push($ActionArray, '		if [[ ! -d /Backups/$date_dir ]]; then');
-			array_push($ActionArray, '			mkdir /Backups/$date_dir');
-			array_push($ActionArray, '		fi');
-			array_push($ActionArray, '		if [[ ! -d /Backups/$date_dir/$dns ]]; then');
-			array_push($ActionArray, '			mkdir /Backups/$date_dir/$dns');
-			array_push($ActionArray, '		fi');
-			array_push($ActionArray, '		for dir_remoto in ${dirDNS[*]}; do');
-			array_push($ActionArray, '			cp -rf $dir_remoto /Backups/$date_dir/$dns/');
-			array_push($ActionArray, '		done');
-			array_push($ActionArray, '		cp -rf /etc/default/bind9 /Backups/$date_dir/$dns/bind9-default');
-			array_push($ActionArray, '		mv /Backups/$date_dir/$dns $DirStorage');
-			array_push($ActionArray, '		if [[ $? -eq 0 ]]; then');
-			array_push($ActionArray, '			echo -e "\n\e[0;32mBacKUP del servicio DNS realizado con éxito!"');
-			array_push($ActionArray, '			echo -e "\e[0;37m"');
-			array_push($ActionArray, '		else');
-			array_push($ActionArray, '			echo -e "\n\e[0;31mOcurrio un error durante el BacKUP del servicio DNS\n"');
-			array_push($ActionArray, '			echo -e "\e[0;37m"');
-			array_push($ActionArray, '		fi');
-			array_push($ActionArray, '	else');
-			array_push($ActionArray, '		ShowErrors bind9 "El servicio no existe"');
-			array_push($ActionArray, '	fi');
-			array_push($ActionArray, '}');
-			array_push($ActionArray, 'function CompressFiles(){');
-			array_push($ActionArray, '	if [ -d $DirStorage ]; then');
-			array_push($ActionArray, '		cd $DirStorage');
-			array_push($ActionArray, '		tar -czf $DirStorage.tar.gz *');
-			array_push($ActionArray, '		rm -rf ../$DirCompact/');
-			array_push($ActionArray, '	fi');
-			array_push($ActionArray, '}');
-			array_push($ActionArray, 'function ShowErrors(){');
-			array_push($ActionArray, '	echo -e "+ Script en ejecución:\e[0;31m" $0 "\e[0;37m| Servicio:\e[0;31m" ${1} "\e[0;37m"');
-			array_push($ActionArray, '	echo -e "+ Mensaje de Error:\e[0;31m" ${2} "\e[0;37m"');
-			array_push($ActionArray, '}');
-			array_push($ActionArray, 'if [ $# == 0 ]; then');
-			array_push($ActionArray, '	echo "Por favor, pase los parámetros necesarios. [IP][-Services ...]"');
-			array_push($ActionArray, 'else');
-			array_push($ActionArray, '	CreateDirs');
-			array_push($ActionArray, '	LA=$@');
-			array_push($ActionArray, '	ListArguments=(${LA// / })');
-			array_push($ActionArray, 'fi');
-			array_push($ActionArray, 'CONTADOR=0');
-			array_push($ActionArray, 'while [  $CONTADOR -lt $# ]; do');
-			array_push($ActionArray, '	for Dir in $*; do');
-			array_push($ActionArray, '		if [[ $(echo $Dir | egrep "^[-data:]*") ]]; then');
-			array_push($ActionArray, '			data=$Dir');
-			array_push($ActionArray, '		fi');
-			array_push($ActionArray, '	done');
-			array_push($ActionArray, '	if [ $# == 0 ]; then');
-			array_push($ActionArray, '		BackupApache');
-			array_push($ActionArray, '		BackupMySQL');
-			array_push($ActionArray, '		backupDHCP');
-			array_push($ActionArray, '		backupDNS');				
-			array_push($ActionArray, '	elif [ $# -gt 0 ]; then');
-			array_push($ActionArray, '		case ${ListArguments[$CONTADOR]} in');
-			array_push($ActionArray, '			"-apache")');
-			array_push($ActionArray, '				BackupApache');
-			array_push($ActionArray, '			;;');
-			array_push($ActionArray, '			"-mysql")');
-			array_push($ActionArray, '				BackupMySQL');
-			array_push($ActionArray, '			;;');
-			array_push($ActionArray, '			"-dhcp")');
-			array_push($ActionArray, '				backupDHCP');
-			array_push($ActionArray, '			;;');
-			array_push($ActionArray, '			"-dns")');
-			array_push($ActionArray, '				backupDNS');
-			array_push($ActionArray, '			;;');
-			array_push($ActionArray, '			$data)');
-			array_push($ActionArray, '				echo "Pendiente llamar funcion BackupData"');
-			array_push($ActionArray, '			;;');
-			array_push($ActionArray, '			*)');
-			array_push($ActionArray, '				echo "El parámetro: "${ListArguments[$CONTADOR]} "es desconocido"');
-			array_push($ActionArray, '			;;');
-			array_push($ActionArray, '		esac');
-			array_push($ActionArray, '	fi');
-			array_push($ActionArray, '	let CONTADOR=CONTADOR+1');
-			array_push($ActionArray, 'done');
-			array_push($ActionArray, 'if [[ $CONTADOR != 0 ]]; then');
-			array_push($ActionArray, '	CompressFiles');
-			array_push($ActionArray, '	scp -C -r /Backups/* network@192.168.100.10:/Backups');
-			array_push($ActionArray, 'fi');	
-			
-			// if ($this->recvFile("/Backups")){
-			// 	echo "Enviado";
-			// } else {
-			// 	echo "No ha sido enviado";
-			// }
-			
-			$RL[] = $this->remote_path.$filename." ".$arguments;
-			array_push($RL, "rm -rf ".$this->remote_path.$filename);
-			if ($this->writeFile($ActionArray, $filename) && $this->sendFile($filename))
-				return $this->RunLines(implode("\n", $RL));
-				// return "Resultado";
-			return getErrors();
-		}
-
 		public function getMemoryState(){
 			$filename = "getMemoryState.sh";
 			$ActionArray[] = "MEMORIA=($(free -m | grep 'Mem' | cut -d ':' -f2))";
@@ -506,6 +300,10 @@
 			return shell_exec("ip route show default | awk '/default/ {print $3}'");
 		}
 
+		public function getMyIPServer(){
+			return shell_exec("ip -4 route get 8.8.8.8 | awk {'print $7'} | tr -d '\n'");
+		}
+
 		public function FinalConnect($ip_host, $username, $password){
 			if (!function_exists("ssh2_connect")) {
         		array_push($this->errors, "La función ssh2_connect no existe");
@@ -591,10 +389,6 @@
 		public function getIPNetOnly(){
 			return @$this->ConnectDB()->query("SELECT DISTINCT * FROM network LIMIT 1;")->fetch_array(MYSQLI_ASSOC)['ip_net'];
 		}
-
-		// public function VerifyIPForward($IPHost){
-
-		// }
 
 		public $CommandIpRoute = "ip route | sed -e '/src/ !d' | sed '/default/ d' | cut -d ' ' -f1";
 
