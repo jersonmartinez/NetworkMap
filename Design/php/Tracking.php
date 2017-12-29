@@ -22,9 +22,9 @@
 			$time_end = microtime(true);
 			$time = $time_end - $time_start;
 
-
-			echo "<br/><br/> <b>Retardo:</b> ".number_format($time, 2, '.', '')." segundos\n";
-
+			?>
+				<input type="hidden" id="input_retardo" value="Retardo de tiempo: <?php echo number_format($time, 2, '.', ''); ?> seg." />
+			<?php
 
 
 			// // Dormir por un momento

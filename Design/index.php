@@ -310,13 +310,13 @@
                     <li class="header">NAVEGACIÓN PRINCIPAL</li>
                     <li class="active">
                         <a href="./index.php">
-                            <i class="material-icons">devices</i>
+                            <i class="material-icons">devices_other</i>
                             <span>Dispositivos</span>
                         </a>
                     </li>
                     <li>
                         <a href="./networkmap.php">
-                            <i class="material-icons">network_check</i>
+                            <i class="material-icons">device_hub</i>
                             <span>Mapa de red</span>
                         </a>
                     </li>
@@ -495,7 +495,7 @@
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="card">
                                     <div class="header">
-                                        <h2>LISTA DE DISPOSITIVOS</h2>
+                                        <i class="material-icons">devices</i> <h2 style="position: absolute; top: 23px; left: 50px;">LISTA DE DISPOSITIVOS</h2>
                                         <ul class="header-dropdown m-r--5">
                                             <li class="dropdown">
                                                 <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -516,7 +516,7 @@
                                                     <tr>
                                                         <th>Dirección de red</th>
                                                         <th>IP (Terminal)</th>
-                                                        <th>Enrutador</th>
+                                                        <th>Tipo</th>
                                                         <th>Próxima red</th>
                                                     </tr>
                                                 </thead>
@@ -532,17 +532,17 @@
                                                                             <?php 
                                                                                 if ($row['router']){
                                                                                     ?>
-                                                                                        <span class="label bg-green">SÍ</span>
+                                                                                        <i class="material-icons">swap_vertical_circle</i> <span class="label bg-orange"> Enrutador</span>
                                                                                     <?php
                                                                                 } else {
 
                                                                                     if ($CN->getMyIPServer() == $row['ip_host']){
                                                                                         ?>
-                                                                                            <span class="label bg-red">NO</span> - Monitorizador
+                                                                                            <i class="material-icons">dns</i> <span class="label bg-blue"> Servidor</span>
                                                                                         <?php
                                                                                     } else {
                                                                                         ?>
-                                                                                            <span class="label bg-red">NO</span>
+                                                                                            <i class="material-icons">computer</i> <span class="label bg-green"> Equipo</span>
                                                                                         <?php
                                                                                     }
 
@@ -555,9 +555,7 @@
                                                                             if ($row['net_next'] != "-"){
                                                                                 ?>
                                                                                     <td>
-                                                                                        <div class="progress">
-                                                                                            <div class="progress-bar bg-green" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="width: 62%"></div>
-                                                                                        </div>
+                                                                                        <i class="material-icons">device_hub</i>
                                                                                     </td>
                                                                                 <?php
                                                                             }

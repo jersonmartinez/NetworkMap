@@ -21,8 +21,8 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&amp;subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link href="css/fonts.css" rel="stylesheet" type="text/css">
+    <link href="css/icons.css" rel="stylesheet" type="text/css">
 
     <!-- Bootstrap Core Css -->
     <link href="plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -491,27 +491,39 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h2>MAPA DE RED (TOPOLOGÍA)</h2>
+                            <button type="button" onclick="javascript: StartTracking();" class="btn_tracking btn btn-warning waves-effect">
+                                    <i class="material-icons">perm_scan_wifi</i>
+                                    <span>SONDEAR INFRAESTRUCTURA DE RED</span>
+                            </button>
+
+                            <label style="display: none; position: absolute; right: 50px;" id="retardo_temporal">Retardo de tiempo: 12.45 seg.</label>
+
+                            <div class="preloader pl-size-xs network_map_loader" style="top: 8px; left: 10px; display: none;">
+                                <div class="spinner-layer pl-red-grey">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
+                                        <li><a href="./index.php">Dispositivos</a></li>
                                         <li><a href="javascript:void(0);">Another action</a></li>
                                         <li><a href="javascript:void(0);">Something else here</a></li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
-                        <div class="body">
-                            <div class="table-responsive">
-                                <button type="button" onclick="javascript: StartTracking();" class="btn_tracking btn btn-warning waves-effect">
-                                    <i class="material-icons">perm_scan_wifi</i>
-                                    <span>SONDEAR INFRAESTRUCTURA DE RED</span>
-                                </button>
-                            </div>
+                        <div class="body" style="padding: 0;">
+                            
                             
                             <div class="here_write">
                                 <?php
