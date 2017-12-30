@@ -480,117 +480,158 @@
         <!-- #END# Right Sidebar -->
     </section>
 
-
-
-
     <section class="content">
         <div class="container-fluid">
 
             <div class="row clearfix">
                 <!-- Task Info -->
 
-                 <?php
-                    if ($CN->getAllHost()->num_rows > 0){
-                        ?>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="card">
-                                    <div class="header">
-                                        <i class="material-icons">devices</i> <h2 style="position: absolute; top: 23px; left: 50px;">LISTA DE DISPOSITIVOS</h2>
-                                        <ul class="header-dropdown m-r--5">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="material-icons">more_vert</i>
-                                                </a>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li><a href="javascript:void(0);">Agregar host</a></li>
-                                                    <li><a href="javascript:void(0);">Ver topología</a></li>
-                                                    <li><a href="javascript:void(0);">Propiedades</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="body">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover dashboard-task-infos">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Dirección de red</th>
-                                                        <th>IP (Terminal)</th>
-                                                        <th>Tipo</th>
-                                                        <th>Próxima red</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php
-                                                        if ($R->num_rows > 0){
-                                                            while ($row = $R->fetch_array(MYSQLI_ASSOC)){
-                                                                ?>
-                                                                    <tr>
-                                                                        <td><?php echo $row['ip_net']; ?></td>
-                                                                        <td><?php echo $row['ip_host']; ?></td>
-                                                                        <td>
-                                                                            <?php 
-                                                                                if ($row['router']){
-                                                                                    ?>
-                                                                                        <i class="material-icons">swap_vertical_circle</i> <span class="label bg-orange"> Enrutador</span>
-                                                                                    <?php
-                                                                                } else {
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <i class="material-icons">devices</i> <h2 style="position: absolute; top: 23px; left: 50px;">LISTA DE DISPOSITIVOS</h2>
+                            <!-- <h2>
+                                EXAMPLE TAB
+                                <small>Add quick, dynamic tab functionality to transition through panes of local content</small>
+                            </h2> -->
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="./networkmap.php" class=" waves-effect waves-block">Mapa de red</a></li>
+                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Another action</a></li>
+                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Something else here</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs tab-nav-right" style="margin-top: -20px;" role="tablist">
+                                <li role="presentation" class="active"><a href="#home" data-toggle="tab" aria-expanded="true"><i class="material-icons">devices</i> DISPOSITIVOS</a></li>
+                                <li role="presentation" class=""><a href="#profile" data-toggle="tab" aria-expanded="false"><i class="material-icons">computer</i> EQUIPOS</a></li>
+                                <li role="presentation" class=""><a href="#messages" data-toggle="tab" aria-expanded="false"><i class="material-icons">swap_vertical_circle</i> ENRUTADORES</a></li>
+                                <li role="presentation" class=""><a href="#settings_two" data-toggle="tab" aria-expanded="false"><i class="material-icons">device_hub</i> CONMUTADORES</a></li>
+                            </ul>
 
-                                                                                    if ($CN->getMyIPServer() == $row['ip_host']){
-                                                                                        ?>
-                                                                                            <i class="material-icons">dns</i> <span class="label bg-blue"> Servidor</span>
-                                                                                        <?php
-                                                                                    } else {
-                                                                                        ?>
-                                                                                            <i class="material-icons">computer</i> <span class="label bg-green"> Equipo</span>
-                                                                                        <?php
-                                                                                    }
-
-                                                            
-                                                                                }
-                                                                            ?>
-                                                                        </td>
-                                                                        <td><?php echo $row['net_next']; ?></td>
-                                                                        <?php
-                                                                            if ($row['net_next'] != "-"){
-                                                                                ?>
-                                                                                    <td>
-                                                                                        <i class="material-icons">device_hub</i>
-                                                                                    </td>
-                                                                                <?php
-                                                                            }
-                                                                        ?>
-                                                                    </tr>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade active in" id="home">
+                                    
+                                    <?php
+                                        if ($CN->getAllHost()->num_rows > 0){
+                                            ?>
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover dashboard-task-infos">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Dirección de red</th>
+                                                                    <th>IP (Terminal)</th>
+                                                                    <th>Tipo</th>
+                                                                    <th>Próxima red</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
                                                                 <?php
-                                                            }
-                                                        }
-                                                    ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- #END# Browser Usage -->
+                                                                    if ($R->num_rows > 0){
+                                                                        while ($row = $R->fetch_array(MYSQLI_ASSOC)){
+                                                                            ?>
+                                                                                <tr>
+                                                                                    <td><?php echo $row['ip_net']; ?></td>
+                                                                                    <td><?php echo $row['ip_host']; ?></td>
+                                                                                    <td>
+                                                                                        <?php 
+                                                                                            if ($row['router']){
+                                                                                                ?>
+                                                                                                    <i class="material-icons">swap_vertical_circle</i> <span class="label bg-orange"> Enrutador</span>
+                                                                                                <?php
+                                                                                            } else {
 
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="card">
-                                    <div class="header">
-                                        <h2>DISPOSITIVOS TERMINALES (HOST)</h2>
-                                        <ul class="header-dropdown m-r--5">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="material-icons">more_vert</i>
-                                                </a>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li><a href="javascript:void(0);">Agregar host</a></li>
-                                                    <li><a href="javascript:void(0);">Ver topología</a></li>
-                                                    <li><a href="javascript:void(0);">Propiedades</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="body">
+                                                                                                if ($CN->getMyIPServer() == $row['ip_host']){
+                                                                                                    ?>
+                                                                                                        <i class="material-icons">dns</i> <span class="label bg-blue"> Servidor</span>
+                                                                                                    <?php
+                                                                                                } else {
+                                                                                                    ?>
+                                                                                                        <i class="material-icons">computer</i> <span class="label bg-green"> Equipo</span>
+                                                                                                    <?php
+                                                                                                }
+
+                                                                        
+                                                                                            }
+                                                                                        ?>
+                                                                                    </td>
+                                                                                    <td><?php echo $row['net_next']; ?></td>
+                                                                                    <?php
+                                                                                        if ($row['net_next'] != "-"){
+                                                                                            ?>
+                                                                                                <td>
+                                                                                                    <i class="material-icons">device_hub</i>
+                                                                                                </td>
+                                                                                            <?php
+                                                                                        } else {
+                                                                                            ?>
+                                                                                                <td>
+                                                                                                    <div class="progress">
+                                                                                                        <div class="progress-bar bg-green" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="width: 62%"></div>
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                            <?php
+
+                                                                                        }
+                                                                                    ?>
+                                                                                </tr>
+                                                                            <?php
+                                                                        }
+                                                                    }
+                                                                ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!-- #END# Browser Usage -->
+
+
+                                                
+                                            <?php
+                                        } else {
+                                            ?>
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                    <div class="card">
+                                                        <div class="header">
+                                                            <h2>APLIQUE EL AUTODESCUBRIMIENTO (SONDEO DE RED)</h2>
+                                                            <ul class="header-dropdown m-r--5">
+                                                                <li class="dropdown">
+                                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                        <i class="material-icons">more_vert</i>
+                                                                    </a>
+                                                                    <ul class="dropdown-menu pull-right">
+                                                                        <li><a href="javascript:void(0);">Agregar host</a></li>
+                                                                        <li><a href="./networkmap.php">Mapa de red</a></li>
+                                                                        <li><a href="javascript:void(0);">Propiedades</a></li>
+                                                                    </ul>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="body">
+                                                            <div class="table-responsive">
+                                                                <h4>¡Te esperamos!...</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php
+                                        }
+                                    ?>
+
+                                    <b>Descripción</b>
+                                    <p>Lista todos las terminales escaneadas durante el sondeo de red, obteniendo deatos de quipos o host finales como: computadoras, impresoras, teléfono, tabletas u otra terminal; además de los dispositivos físicos a nivel de red y enlace para la comunicación en el mapa de red.</p>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="profile">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                         <div class="table-responsive">
                                             <table class="table table-hover dashboard-task-infos">
                                                 <thead>
@@ -646,29 +687,13 @@
                                             </table>
                                         </div>
                                     </div>
+
+                                    <b>Descripción</b>
+                                    <p>Los equipos o host finales como: computadoras, impresoras, teléfono, tabletas u otra terminal.</p>
                                 </div>
-                            </div>
 
-
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="card">
-                                    <div class="header">
-                                        <h2>ENRUTADORES (LINUX)</h2>
-                                        <ul class="header-dropdown m-r--5">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="material-icons">more_vert</i>
-                                                </a>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li><a href="javascript:void(0);">Agregar host</a></li>
-                                                    <li><a href="javascript:void(0);">Ver topología</a></li>
-                                                    <li><a href="javascript:void(0);">Propiedades</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="body">
-                                        
+                                <div role="tabpanel" class="tab-pane fade" id="messages">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                         <div class="table-responsive">
                                             <table class="table table-hover dashboard-task-infos">
                                                 <thead>
@@ -726,28 +751,16 @@
                                             </table>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="card">
-                                    <div class="header">
-                                        <h2>CONMUTADORES DE RED (SWITCHES)</h2>
-                                        <ul class="header-dropdown m-r--5">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="material-icons">more_vert</i>
-                                                </a>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li><a href="javascript:void(0);">Agregar host</a></li>
-                                                    <li><a href="javascript:void(0);">Ver topología</a></li>
-                                                    <li><a href="javascript:void(0);">Propiedades</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="body">
-                                        
+                                    <b>Descripción</b>
+                                    <p>
+                                       Se listan todos los enrutadores (routers) encontrados durante el sondeo de red.
+                                    </p>
+                                </div>
+
+                                <div role="tabpanel" class="tab-pane fade" id="settings_two">
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                         <div class="table-responsive">
                                             <table class="table table-hover dashboard-task-infos">
                                                 <thead>
@@ -787,45 +800,20 @@
                                                             }
                                                         }
                                                     ?>
-
-                                                   
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        <?php
-                    } else {
-                        ?>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="card">
-                                    <div class="header">
-                                        <h2>APLIQUE EL AUTODESCUBRIMIENTO (SONDEO DE RED)</h2>
-                                        <ul class="header-dropdown m-r--5">
-                                            <li class="dropdown">
-                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="material-icons">more_vert</i>
-                                                </a>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li><a href="javascript:void(0);">Agregar host</a></li>
-                                                    <li><a href="javascript:void(0);">Ver topología</a></li>
-                                                    <li><a href="javascript:void(0);">Propiedades</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="body">
-                                        <div class="table-responsive">
-                                            <h4>¡Te esperamos!...</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php
-                    }
-                ?>
 
+                                    <b>Descripción</b>
+                                    <p>
+                                       Se listan todos los conmutadores (switches) encontrados durante el sondeo de red.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
