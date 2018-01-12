@@ -488,6 +488,8 @@
 
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
+
+                       
                         <div class="header">
                             <i class="material-icons">devices</i> <h2 style="position: absolute; top: 23px; left: 50px;">LISTA DE DISPOSITIVOS</h2>
                             <!-- <h2>

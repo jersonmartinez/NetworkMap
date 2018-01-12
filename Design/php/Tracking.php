@@ -15,6 +15,10 @@
 			
 			$time_start = microtime(true);
 
+			// echo shell_exec("nmap 192.168.100.0/24 -n -sP | grep report | awk '{print $5}'");
+			// 	echo " | host: ".$value;
+			// }
+
 			$CN->SpaceTest();
 
 			include ("../network/nodeStyles/images.php");
