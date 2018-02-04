@@ -73,20 +73,20 @@
     </div>
     <!-- #END# Search Bar -->
     <!-- Top Bar -->
-    <nav class="navbar">
+    <!-- <nav class="navbar">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
                 <a class="navbar-brand" href="./">Network Map</a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
+            </div> -->
+            <!-- <div class="collapse navbar-collapse" id="navbar-collapse"> -->
+                <!-- <ul class="nav navbar-nav navbar-right"> -->
                     <!-- Call Search -->
-                    <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
+                    <!-- <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li> -->
                     <!-- #END# Call Search -->
                     <!-- Notifications -->
-                    <li class="dropdown">
+                    <!-- <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
                             <span class="label-count">7</span>
@@ -192,10 +192,10 @@
                                 <a href="javascript:void(0);">View All Notifications</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
                     <!-- #END# Notifications -->
                     <!-- Tasks -->
-                    <li class="dropdown">
+                   <!--  <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">flag</i>
                             <span class="label-count">9</span>
@@ -270,13 +270,13 @@
                                 <a href="javascript:void(0);">View All Tasks</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
                     <!-- #END# Tasks -->
-                    <li class="pull-right"><a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="material-icons">more_vert</i></a></li>
+          <!--           <li class="pull-right"><a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="material-icons">more_vert</i></a></li>
                 </ul>
             </div>
         </div>
-    </nav>
+    </nav> -->
     <!-- #Top Bar -->
     <section>
         <!-- Left Sidebar -->
@@ -287,8 +287,8 @@
                     <img src="images/user.png" width="48" height="48" alt="User" />
                 </div>
                 <div class="info-container">
-                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Jerson Martínez</div>
-                    <div class="email">jersonmartinez@networkmap.com</div>
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Jerson Martínez (Est. CS50x.ni)</div>
+                    <div class="email">jersonmartinez@cs50x.ni</div>
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
@@ -320,13 +320,15 @@
                             <span>Mapa de red</span>
                         </a>
                     </li>
+
+                    <img src="images/cs50.png" width="180px" height="180px" />
                 </ul>
             </div>
             <!-- #Menu -->
             <!-- Footer -->
             <div class="legal">
                 <div class="copyright">
-                    &copy; 2017 - 2018 <a href="javascript:void(0);">NetworkMap</a>.
+                    &copy; 2017 - 2018 <a href="javascript:void(0);">NetworkMap | CS50x.ni</a>.
                 </div>
                 <div class="version">
                     <b>Version: </b> 1.0
@@ -334,150 +336,7 @@
             </div>
             <!-- #Footer -->
         </aside>
-        <!-- #END# Left Sidebar -->
-        <!-- Right Sidebar -->
-        <aside id="rightsidebar" class="right-sidebar">
-            <ul class="nav nav-tabs tab-nav-right" role="tablist">
-                <li role="presentation" class="active"><a href="#skins" data-toggle="tab">SKINS</a></li>
-                <li role="presentation"><a href="#settings" data-toggle="tab">SETTINGS</a></li>
-            </ul>
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane fade in active in active" id="skins">
-                    <ul class="demo-choose-skin">
-                        <li data-theme="red" class="active">
-                            <div class="red"></div>
-                            <span>Red</span>
-                        </li>
-                        <li data-theme="pink">
-                            <div class="pink"></div>
-                            <span>Pink</span>
-                        </li>
-                        <li data-theme="purple">
-                            <div class="purple"></div>
-                            <span>Purple</span>
-                        </li>
-                        <li data-theme="deep-purple">
-                            <div class="deep-purple"></div>
-                            <span>Deep Purple</span>
-                        </li>
-                        <li data-theme="indigo">
-                            <div class="indigo"></div>
-                            <span>Indigo</span>
-                        </li>
-                        <li data-theme="blue">
-                            <div class="blue"></div>
-                            <span>Blue</span>
-                        </li>
-                        <li data-theme="light-blue">
-                            <div class="light-blue"></div>
-                            <span>Light Blue</span>
-                        </li>
-                        <li data-theme="cyan">
-                            <div class="cyan"></div>
-                            <span>Cyan</span>
-                        </li>
-                        <li data-theme="teal">
-                            <div class="teal"></div>
-                            <span>Teal</span>
-                        </li>
-                        <li data-theme="green">
-                            <div class="green"></div>
-                            <span>Green</span>
-                        </li>
-                        <li data-theme="light-green">
-                            <div class="light-green"></div>
-                            <span>Light Green</span>
-                        </li>
-                        <li data-theme="lime">
-                            <div class="lime"></div>
-                            <span>Lime</span>
-                        </li>
-                        <li data-theme="yellow">
-                            <div class="yellow"></div>
-                            <span>Yellow</span>
-                        </li>
-                        <li data-theme="amber">
-                            <div class="amber"></div>
-                            <span>Amber</span>
-                        </li>
-                        <li data-theme="orange">
-                            <div class="orange"></div>
-                            <span>Orange</span>
-                        </li>
-                        <li data-theme="deep-orange">
-                            <div class="deep-orange"></div>
-                            <span>Deep Orange</span>
-                        </li>
-                        <li data-theme="brown">
-                            <div class="brown"></div>
-                            <span>Brown</span>
-                        </li>
-                        <li data-theme="grey">
-                            <div class="grey"></div>
-                            <span>Grey</span>
-                        </li>
-                        <li data-theme="blue-grey">
-                            <div class="blue-grey"></div>
-                            <span>Blue Grey</span>
-                        </li>
-                        <li data-theme="black">
-                            <div class="black"></div>
-                            <span>Black</span>
-                        </li>
-                    </ul>
-                </div>
-                <div role="tabpanel" class="tab-pane fade" id="settings">
-                    <div class="demo-settings">
-                        <p>GENERAL SETTINGS</p>
-                        <ul class="setting-list">
-                            <li>
-                                <span>Report Panel Usage</span>
-                                <div class="switch">
-                                    <label><input type="checkbox" checked><span class="lever"></span></label>
-                                </div>
-                            </li>
-                            <li>
-                                <span>Email Redirect</span>
-                                <div class="switch">
-                                    <label><input type="checkbox"><span class="lever"></span></label>
-                                </div>
-                            </li>
-                        </ul>
-                        <p>SYSTEM SETTINGS</p>
-                        <ul class="setting-list">
-                            <li>
-                                <span>Notifications</span>
-                                <div class="switch">
-                                    <label><input type="checkbox" checked><span class="lever"></span></label>
-                                </div>
-                            </li>
-                            <li>
-                                <span>Auto Updates</span>
-                                <div class="switch">
-                                    <label><input type="checkbox" checked><span class="lever"></span></label>
-                                </div>
-                            </li>
-                        </ul>
-                        <p>ACCOUNT SETTINGS</p>
-                        <ul class="setting-list">
-                            <li>
-                                <span>Offline</span>
-                                <div class="switch">
-                                    <label><input type="checkbox"><span class="lever"></span></label>
-                                </div>
-                            </li>
-                            <li>
-                                <span>Location Permission</span>
-                                <div class="switch">
-                                    <label><input type="checkbox" checked><span class="lever"></span></label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </aside>
-        <!-- #END# Right Sidebar -->
+        
     </section>
 
     <section class="content">
@@ -485,46 +344,46 @@
 
             <div class="row clearfix">
                 <!-- Task Info -->
+                <?php
+                    if ($CN->getAllHost()->num_rows > 0){
+                        ?>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="card">
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
+                                   
+                                    <div class="header">
+                                        <i class="material-icons">devices</i> <h2 style="position: absolute; top: 23px; left: 50px;">LISTA DE DISPOSITIVOS</h2>
+                                        <!-- <h2>
+                                            EXAMPLE TAB
+                                            <small>Add quick, dynamic tab functionality to transition through panes of local content</small>
+                                        </h2> -->
+                                        <ul class="header-dropdown m-r--5">
+                                            <li class="dropdown">
+                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+                                                    <i class="material-icons">more_vert</i>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right">
+                                                    <li><a href="./networkmap.php" class=" waves-effect waves-block">Mapa de red</a></li>
+                                                    <li><a href="javascript:void(0);" class=" waves-effect waves-block">Another action</a></li>
+                                                    <li><a href="javascript:void(0);" class=" waves-effect waves-block">Something else here</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="body">
+                                        <!-- Nav tabs -->
+                                        <ul class="nav nav-tabs tab-nav-right" style="margin-top: -20px;" role="tablist">
+                                            <li role="presentation" class="active"><a href="#home" data-toggle="tab" aria-expanded="true"><i class="material-icons">devices</i> DISPOSITIVOS</a></li>
+                                            <li role="presentation" class=""><a href="#profile" data-toggle="tab" aria-expanded="false"><i class="material-icons">computer</i> EQUIPOS</a></li>
+                                            <li role="presentation" class=""><a href="#messages" data-toggle="tab" aria-expanded="false"><i class="material-icons">swap_vertical_circle</i> ENRUTADORES</a></li>
+                                            <li role="presentation" class=""><a href="#settings_two" data-toggle="tab" aria-expanded="false"><i class="material-icons">device_hub</i> CONMUTADORES</a></li>
+                                        </ul>
 
-                       
-                        <div class="header">
-                            <i class="material-icons">devices</i> <h2 style="position: absolute; top: 23px; left: 50px;">LISTA DE DISPOSITIVOS</h2>
-                            <!-- <h2>
-                                EXAMPLE TAB
-                                <small>Add quick, dynamic tab functionality to transition through panes of local content</small>
-                            </h2> -->
-                            <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="./networkmap.php" class=" waves-effect waves-block">Mapa de red</a></li>
-                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Another action</a></li>
-                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Something else here</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="body">
-                            <!-- Nav tabs -->
-                            <ul class="nav nav-tabs tab-nav-right" style="margin-top: -20px;" role="tablist">
-                                <li role="presentation" class="active"><a href="#home" data-toggle="tab" aria-expanded="true"><i class="material-icons">devices</i> DISPOSITIVOS</a></li>
-                                <li role="presentation" class=""><a href="#profile" data-toggle="tab" aria-expanded="false"><i class="material-icons">computer</i> EQUIPOS</a></li>
-                                <li role="presentation" class=""><a href="#messages" data-toggle="tab" aria-expanded="false"><i class="material-icons">swap_vertical_circle</i> ENRUTADORES</a></li>
-                                <li role="presentation" class=""><a href="#settings_two" data-toggle="tab" aria-expanded="false"><i class="material-icons">device_hub</i> CONMUTADORES</a></li>
-                            </ul>
-
-                            <!-- Tab panes -->
-                            <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane fade active in" id="home">
-                                    
-                                    <?php
-                                        if ($CN->getAllHost()->num_rows > 0){
-                                            ?>
+                                        <!-- Tab panes -->
+                                        <div class="tab-content">
+                                            <div role="tabpanel" class="tab-pane fade active in" id="home">
+                                                
+                                                
                                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                                     <div class="table-responsive">
                                                         <table class="table table-hover dashboard-task-infos">
@@ -596,38 +455,6 @@
                                                 </div>
                                                 <!-- #END# Browser Usage -->
 
-
-                                                
-                                            <?php
-                                        } else {
-                                            ?>
-                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                                    <div class="card">
-                                                        <div class="header">
-                                                            <h2>APLIQUE EL AUTODESCUBRIMIENTO (SONDEO DE RED)</h2>
-                                                            <ul class="header-dropdown m-r--5">
-                                                                <li class="dropdown">
-                                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                                                        <i class="material-icons">more_vert</i>
-                                                                    </a>
-                                                                    <ul class="dropdown-menu pull-right">
-                                                                        <li><a href="javascript:void(0);">Agregar host</a></li>
-                                                                        <li><a href="./networkmap.php">Mapa de red</a></li>
-                                                                        <li><a href="javascript:void(0);">Propiedades</a></li>
-                                                                    </ul>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="body">
-                                                            <div class="table-responsive">
-                                                                <h4>¡Te esperamos!...</h4>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <?php
-                                        }
-                                    ?>
 
                                     <b>Descripción</b>
                                     <p>Lista todos las terminales escaneadas durante el sondeo de red, obteniendo deatos de quipos o host finales como: computadoras, impresoras, teléfono, tabletas u otra terminal; además de los dispositivos físicos a nivel de red y enlace para la comunicación en el mapa de red.</p>
@@ -816,6 +643,36 @@
                         </div>
                     </div>
                 </div>
+                <?php
+                    } else {
+                        ?>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                    <div class="card">
+                                                        <div class="header">
+                                                            <h2>APLIQUE EL AUTODESCUBRIMIENTO (SONDEO DE RED)</h2>
+                                                            <ul class="header-dropdown m-r--5">
+                                                                <li class="dropdown">
+                                                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                        <i class="material-icons">more_vert</i>
+                                                                    </a>
+                                                                    <ul class="dropdown-menu pull-right">
+                                                                        <li><a href="javascript:void(0);">Agregar host</a></li>
+                                                                        <li><a href="./networkmap.php">Mapa de red</a></li>
+                                                                        <li><a href="javascript:void(0);">Propiedades</a></li>
+                                                                    </ul>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="body">
+                                                            <div class="table-responsive">
+                                                                <h4>¡Te esperamos!...</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                        <?php
+                    }
+                ?>
             </div>
         </div>
     </section>
