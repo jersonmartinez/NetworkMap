@@ -441,9 +441,9 @@
 
 			do {
 				//Si esta vacia la tabla network
-				if (!$this->getCountNetwork()){
+				if (@!$this->getCountNetwork()){
 					//Se agrega la red por omision
-					if ($this->addNetwork($this->getIpRouteLocal())){
+					if (@$this->addNetwork($this->getIpRouteLocal())){
 						// echo "No hay datos (accion) => Se ha agregado el primer dato de red: ".$this->getIpRouteLocal();
 					} else {
 						// echo "No hay datos (accion) => No ha podido agregar la primera direccion de red: ".$this->getIpRouteLocal();
@@ -469,8 +469,8 @@
 
 					// echo "Valores sondeados: ";
 					foreach ($D as $value) {
-						$ip_forward = $this->IsRouter($value);
-						$ArrayNets = explode("\n", $this->getIpRouteRemote($value));
+						$ip_forward = @$this->IsRouter($value);
+						$ArrayNets = @explode("\n", $this->getIpRouteRemote($value));
 						
 						//Se;alando patrones para extraer el siguiente.
 						$NextNet = $ArrayNets[0];
@@ -543,6 +543,14 @@
 
 		public function SondearRed($IPNet){
 			return explode("\n", shell_exec("nmap ".$IPNet." -n -sP | grep report | awk '{print $5}'"));
+		}
+
+		public function RastreoTotal($IPNet){
+			return explode("\n", shell_exec("nmap ".$IPNet." -n -sP"));
+		}
+
+		public function SrMartinez(){
+			return explode("\n", shell_exec("nmap 192.168.100.0/24 -n -sP | grep report | awk '{print $5}'"));
 		}
 
 		public function Tracking(){

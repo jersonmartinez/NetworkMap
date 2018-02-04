@@ -15,6 +15,10 @@
 			
 			$time_start = microtime(true);
 
+			// echo shell_exec("nmap 192.168.100.0/24 -n -sP | grep report | awk '{print $5}'");
+			// 	echo " | host: ".$value;
+			// }
+
 			$CN->SpaceTest();
 
 			include ("../network/nodeStyles/images.php");
@@ -22,9 +26,9 @@
 			$time_end = microtime(true);
 			$time = $time_end - $time_start;
 
-
-			echo "<br/><br/> <b>Retardo:</b> ".number_format($time, 2, '.', '')." segundos\n";
-
+			?>
+				<input type="hidden" id="input_retardo" value="Retardo de tiempo: <?php echo number_format($time, 2, '.', ''); ?> seg." />
+			<?php
 
 
 			// // Dormir por un momento
